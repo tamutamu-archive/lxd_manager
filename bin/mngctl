@@ -1,0 +1,47 @@
+#!/bin/bash -eu
+
+CURDIR=$(cd $(dirname $0); pwd)
+pushd ${CURDIR} > /dev/null
+
+# Include global.conf
+. ${LXD_HOME}/include/global.conf
+
+
+command=$1
+shift
+
+case "$command" in
+  info)
+      sudo lxc info | less
+      exit 0
+      ;;
+
+  list)
+      sudo lxc list
+      exit 0
+      ;;
+
+  imglist)
+      while getopts ":rn:" OPT
+      do
+        case $OPT in
+          "r") REMOTE=true
+               ;;
+          "n") IMG_NAME="$OPTARG"
+               ;;
+          esac
+      done
+
+      if [ ${REMOTE} ]; then
+        sudo lxc image list images: ${IMG_NAME}
+      else
+        sudo lxc image list local: ${IMG_NAME}
+      fi
+
+      exit 0
+      ;;
+
+esac
+
+
+popd > /dev/null

@@ -1,0 +1,56 @@
+!Container
+architecture: x86_64
+config:
+  image.architecture: amd64
+  image.description: Centos 7 amd64 (20181102_02:16)
+  image.os: Centos
+  image.release: '7'
+  image.serial: 20181102_02:16
+  security.privileged: 'true'
+  volatile.apply_template: create
+  volatile.base_image: 309291dfc5408fc78c7308a2426f10fa7192cd11667d97caddd184165360c096
+  volatile.eth0.hwaddr: 00:16:3e:14:ee:cf
+  volatile.idmap.base: '0'
+  volatile.idmap.next: '[]'
+  volatile.last_state.idmap: '[]'
+devices: {}
+ephemeral: false
+profiles:
+- default
+stateful: false
+description: ''
+created_at: 2018-11-05T18:40:31+09:00
+expanded_config:
+  image.architecture: amd64
+  image.description: Centos 7 amd64 (20181102_02:16)
+  image.os: Centos
+  image.release: '7'
+  image.serial: 20181102_02:16
+  security.privileged: 'true'
+  volatile.apply_template: create
+  volatile.base_image: 309291dfc5408fc78c7308a2426f10fa7192cd11667d97caddd184165360c096
+  volatile.eth0.hwaddr: 00:16:3e:14:ee:cf
+  volatile.idmap.base: '0'
+  volatile.idmap.next: '[]'
+  volatile.last_state.idmap: '[]'
+expanded_devices:
+  eth0:
+    name: eth0
+    nictype: bridged
+    parent: lxdbr0
+    type: nic
+  root:
+    path: /
+    pool: default
+    type: disk
+name: centos7
+status: Stopped
+status_code: 102
+last_used_at: 1970-01-01T09:00:00+09:00
+location: none
+backups: []
+state:
+snapshots: []
+lxtdata:
+  yaml: /var/lxd/container/base/centos7/.conf/ct.yml
+  portforward: []

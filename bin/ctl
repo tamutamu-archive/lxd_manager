@@ -1,0 +1,5 @@
+#!/bin/bash -eu
+
+
+. ${LXD_HOME}/.lxd_profile
+python ${LXD_HOME}/lib/lxt/ct_main.py --act ${1} ${@:2:($#-1)} --ct_path "$(pwd)"

@@ -1,0 +1,39 @@
+config:
+  core.https_address: 0.0.0.0:8443
+  core.trust_password: password
+  images.auto_update_interval: 6
+
+# Storage pools
+storage_pools:
+- name: default
+  driver: zfs
+  config:
+    zfs.pool_name: default
+
+# Network devices
+networks:
+- name: lxdbr0
+  type: bridge
+  config:
+    ipv4.firewall: true
+    ipv4.nat:      true
+    ipv4.dhcp:     true
+    ipv4.address:  10.73.233.1/24
+    ipv6.firewall: false
+    ipv6.nat:      false
+    ipv6.dhcp:     false
+    ipv6.address:  none
+
+# Profiles
+profiles:
+- name: default
+  devices:
+    root:
+      path: /
+      pool: default
+      type: disk
+    eth0:
+      name:     eth0
+      nictype:  bridged
+      parent:   lxdbr0
+      type:     nic

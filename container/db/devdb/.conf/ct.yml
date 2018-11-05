@@ -1,0 +1,46 @@
+!Container
+container:
+  architecture: x86_64
+  config:
+    security.privileged: 'true'
+    volatile.apply_template: create
+    volatile.base_image: 398811d29c3f45719b5e2c9c4da48b36007f31e9c64632892a2951ec32262966
+    volatile.eth0.hwaddr: 00:16:3e:5e:44:4f
+    volatile.idmap.base: '0'
+    volatile.idmap.next: '[]'
+    volatile.last_state.idmap: '[]'
+  devices: {}
+  ephemeral: false
+  profiles:
+  - default
+  stateful: false
+  description: ''
+  created_at: 2018-08-24T01:22:03Z
+  expanded_config:
+    security.privileged: 'true'
+    volatile.apply_template: create
+    volatile.base_image: 398811d29c3f45719b5e2c9c4da48b36007f31e9c64632892a2951ec32262966
+    volatile.eth0.hwaddr: 00:16:3e:5e:44:4f
+    volatile.idmap.base: '0'
+    volatile.idmap.next: '[]'
+    volatile.last_state.idmap: '[]'
+  expanded_devices:
+    eth0:
+      name: eth0
+      nictype: bridged
+      parent: lxdbr0
+      type: nic
+    root:
+      path: /
+      pool: default
+      type: disk
+  name: devdb
+  status: Stopped
+  status_code: 102
+  last_used_at: 1970-01-01T00:00:00Z
+  location: ''
+state:
+snapshots: []
+lxtdata:
+  yaml: /var/lxd/container/db/devdb/.conf/ct.yml
+  portforward: []
