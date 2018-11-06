@@ -6,19 +6,6 @@ pushd ${CURDIR}
 
 . var.conf
 
-
-# Remove lxd.
-sudo apt -y purge lxd*
-sudo apt -y autoremove
-sudo apt -y autoclean
-
-
-# Install lxd.
-sudo apt -y install snapd zfsutils-linux jq dnsmasq-utils
-sudo snap install lxd --channel=3.0
-sudo lxd waitready
-
-
 ### Install my lxd modules.
 sudo mkdir -p ${LXD_HOME}
 
@@ -102,6 +89,3 @@ pyenv global lxd_python
 
 pip install ruamel.yaml
 popd
-
-
-sudo usermod -aG lxd ${USER}
