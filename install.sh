@@ -88,5 +88,20 @@ echo "Please restart system!!"
 
 popd
 
+pushd ${LXD_HOME}
+git clone git://github.com/yyuu/pyenv.git ${LXD_HOME}/.pyenv
+git clone https://github.com/pyenv/pyenv-virtualenv.git ${LXD_HOME}/.pyenv/plugins/pyenv-virtualenv
+
+set +e
+. .lxd_profile
+set -e
+
+pyenv install 3.6.4
+pyenv virtualenv 3.6.4 lxd_python
+pyenv global lxd_python
+
+pip install ruamel.yaml
+popd
+
 
 sudo usermod -aG lxd ${USER}
