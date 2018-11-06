@@ -3,9 +3,6 @@
 
 . var.conf
 
-. ${LXD_HOME}/include/ssh-util.sh
-
-
 CURDIR=$(cd $(dirname $0); pwd)
 pushd ${CURDIR}
 
