@@ -75,7 +75,7 @@ sudo lxc exec ${ct_name} -- bash -lc "echo \"${MAINTAIN_USER} ALL=(ALL) NOPASSWD
 sudo lxc exec ${ct_name} -- bash -lc "sudo -iu ${MAINTAIN_USER} bash -c 'mkdir -p ~/.ssh/ && chmod 700 ~/.ssh/'"
 
 ### Setup ssh key.
-gen_sshkey ${ct_name} ${MAINTAIN_USER} ${USER}
+ctl gen_sshkey --ssh_user ${MAINTAIN_USER}
 
 
 ### Install base development.
