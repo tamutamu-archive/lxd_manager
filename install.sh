@@ -89,3 +89,9 @@ pyenv global lxd_python
 
 pip install ruamel.yaml
 popd
+
+
+set +e
+. .lxd_profile
+set -e
+exec ${SHELL} -l
