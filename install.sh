@@ -73,7 +73,9 @@ kernel.dmesg_restrict = 1
 net.ipv4.ip_forward=1
 EOT
 
-sysctl -p /etc/sysctl.conf
+set +e
+sudo sysctl -p /etc/sysctl.conf
+set -e
 
 
 cat <<EOT | sudo tee -a /etc/profile.d/lxd.sh > /dev/null
