@@ -76,7 +76,7 @@ echo "Please restart system!!"
 popd
 
 pushd ${LXD_HOME}
-git clone git://github.com/yyuu/pyenv.git ${LXD_HOME}/.pyenv
+git clone https://github.com/yyuu/pyenv.git ${LXD_HOME}/.pyenv
 git clone https://github.com/pyenv/pyenv-virtualenv.git ${LXD_HOME}/.pyenv/plugins/pyenv-virtualenv
 
 set +e
