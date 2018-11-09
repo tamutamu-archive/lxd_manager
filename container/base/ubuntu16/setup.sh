@@ -15,6 +15,7 @@ MAINTAIN_USER=maintain
 
 
 ### Setup http proxy.
+set +e
 proxy_tmp=$(mktemp)
 env | grep -ie 'http_proxy' -ie 'https_proxy' -ie 'no_proxy' | sed -e 's/^/export /' > ${proxy_tmp}
 sudo lxc file push ${proxy_tmp} ${CT_NAME}/etc/profile.d/proxy.sh
@@ -26,6 +27,7 @@ rm -f ${proxy_tmp}
 
 lexec "echo '. /etc/profile.d/proxy.sh' >> /etc/bash.bashrc"
 lexec ". /etc/bash.bashrc && env | grep -ie http_proxy= -ie https_proxy= >> /etc/environment"
+set -e
 
 ### yum update, system restart.
 lexec "systemctl stop open-iscsi iscsid"
