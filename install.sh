@@ -83,6 +83,7 @@ set +e
 . .lxd_profile
 set -e
 
+sudo apt install zlib1g-dev libbz2-dev libreadline-dev libsqlite3-dev
 pyenv install 3.6.4
 pyenv virtualenv 3.6.4 lxd_python
 pyenv global lxd_python
