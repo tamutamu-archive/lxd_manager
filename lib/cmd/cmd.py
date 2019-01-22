@@ -65,6 +65,8 @@ class CmdFactory:
             inv.add_cmd(DeleteSnapshotCmd(cmd_args))
         elif(act == 'bash'):
             inv.add_cmd(BashCmd(cmd_args))
+        elif(act == 'expand_disk'):
+            inv.add_cmd(ExpandDisk(cmd_args))
 
         return inv
 
@@ -219,11 +221,21 @@ class DeleteSnapshotCmd(BaseCmd):
         self.se.sh(f"lxc delete {self.ct.name}/{del_snap_name}")
 
 
-
 class BashCmd(BaseCmd):
 
     def exec(self):
         os.system(f"lxc exec {self.ct.name} -- /bin/bash")
+
+
+class ExpandDisk(BaseCmd):
+
+    def exec(self):
+        expand_size = self.cmd_args.expand_size
+
+        os.system(f"sudo truncate -s +{expand_size} {self.ct_path}/.conf/disk/disk.img")
+        os.system(f"sudo zpool set autoexpand=on {self.ct.name}")
+        os.system(f"sudo zpool online -e {self.ct.name} {self.ct_path}/.conf/disk/disk.img")
+        os.system(f"sudo zpool set autoexpand=off {self.ct.name}")
 
 
 def remove_portforward(ct, portforward):

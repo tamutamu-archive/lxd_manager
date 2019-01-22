@@ -12,6 +12,7 @@ def parse_args():
     parser.add_argument("--ssh_user", help="ssh username.")
     parser.add_argument("--portforward", help="port forward literal. {protocol}:{sport}:{dport}")
     parser.add_argument("--snap_name", help="lxc snapshot name, lxc info containerName.")
+    parser.add_argument("--expand_size", help="size of expand zfs disk. ex) --expand_size 5G, --expand_size 2900M.")
     return parser.parse_args()
 
 

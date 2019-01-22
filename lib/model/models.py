@@ -1,4 +1,4 @@
-import ruamel.yaml, os
+import ruamel.yaml, os, shutil
 from util import shell
 
 
@@ -9,8 +9,14 @@ class ContainerFactory():
         ct_yml_path = f"{ct_path}/.conf/ct.yml"
         sh = shell.ShellExec()
 
-        sh.sh(f"cd {ct_path} && mkdir -p .conf/")
-        sh.sh(f"lxc init {img} {ct_name} -c security.privileged=true")
+        ### Create Disk.
+        sh.sh(f"cd {ct_path} && mkdir -p .conf/disk/")
+        sh.sh(f"sudo truncate -s 2900M {ct_path}/.conf/disk/disk.img")
+        sh.sh(f"sudo zpool create {ct_name} {ct_path}/.conf/disk/disk.img")
+        sh.sh(f"sudo lxc storage create {ct_name} zfs source={ct_name}")
+
+
+        sh.sh(f"lxc init {img} {ct_name} -s {ct_name} -c security.privileged=true")
         sh.sh(f"lxc list '^{ct_name}$' --format yaml > {ct_yml_path}")
 
         yaml = ruamel.yaml.YAML()
@@ -38,6 +44,7 @@ class Container():
             ct_yml_obj = yaml.load(stream=f)
 
         self.__dict__.update(**ct_yml_obj)
+        self.ct_conf_path = os.path.dirname(ct_yml_path)
 
 
     def save(self):
@@ -50,6 +57,12 @@ class Container():
 
     def destroy(self):
         os.remove(self.lxtdata['yaml'])
+
+        ### Destroy disk.
+        sh = shell.ShellExec()
+        sh.sh(f"sudo zpool destroy {self.name}")
+        sh.sh(f"sudo lxc storage delete {self.name}")
+        shutil.rmtree(f"{self.ct_conf_path}/disk/")
 
 
     def current_info(self):
