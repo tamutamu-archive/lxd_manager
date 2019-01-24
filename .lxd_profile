@@ -2,7 +2,8 @@
 export PYENV_ROOT="${LXD_HOME}/.pyenv"
 export PATH="$PYENV_ROOT/bin:$PATH"
 
-PROMPT_COMMAND='prompt'
+export PROMPT_COMMAND='prompt'
 
 eval "$(pyenv init -)"
 eval "$(pyenv virtualenv-init -)"
+

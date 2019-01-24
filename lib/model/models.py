@@ -11,13 +11,13 @@ class ContainerFactory():
 
         ### Create Disk.
         sh.sh(f"cd {ct_path} && mkdir -p .conf/disk/")
-        sh.sh(f"sudo truncate -s 2900M {ct_path}/.conf/disk/disk.img")
+        sh.sh(f"sudo truncate -s 11000M {ct_path}/.conf/disk/disk.img")
         sh.sh(f"sudo zpool create {ct_name} {ct_path}/.conf/disk/disk.img")
         sh.sh(f"sudo lxc storage create {ct_name} zfs source={ct_name}")
 
 
-        sh.sh(f"lxc init {img} {ct_name} -s {ct_name} -c security.privileged=true")
-        sh.sh(f"lxc list '^{ct_name}$' --format yaml > {ct_yml_path}")
+        sh.sh(f"sudo lxc init {img} {ct_name} -s {ct_name} -c security.privileged=true")
+        sh.sh(f"sudo lxc list '^{ct_name}$' --format yaml > {ct_yml_path}")
 
         yaml = ruamel.yaml.YAML()
 
@@ -66,7 +66,7 @@ class Container():
 
 
     def current_info(self):
-        current_ct_state = shell.ShellExec().cmd_out(f"lxc list '^{self.name}$' --format yaml")
+        current_ct_state = shell.ShellExec().cmd_out(f"sudo lxc list '^{self.name}$' --format yaml")
         yaml = ruamel.yaml.YAML()
         return yaml.load(current_ct_state)
 

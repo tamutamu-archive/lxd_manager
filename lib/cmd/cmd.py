@@ -105,12 +105,12 @@ class InitCmd(BaseCmd):
 
 class StartCmd(BaseCmd):
     def exec(self):
-        self.se.sh(f"lxc start {self.ct.name}")
+        self.se.sh(f"sudo lxc start {self.ct.name}")
 
 
 class StopCmd(BaseCmd):
     def exec(self):
-        self.se.sh(f"lxc stop {self.ct.name}")
+        self.se.sh(f"sudo lxc stop {self.ct.name}")
 
 
 class DeleteCmd(BaseCmd):
@@ -120,7 +120,7 @@ class DeleteCmd(BaseCmd):
         for pf in pfd_list:
             remove_portforward(self.ct, pf)
 
-        self.se.sh(f"lxc delete --force {self.ct.name}")
+        self.se.sh(f"sudo lxc delete --force {self.ct.name}")
         self.ct.destroy()
 
 
@@ -128,7 +128,7 @@ class LaunchCmd(BaseCmd):
 
     def exec(self):
         print(self.ct.name)
-        self.se.sh(f"lxc start {self.ct.name}")
+        self.se.sh(f"sudo lxc start {self.ct.name}")
         sleep(7)
         self.se.sh(f"cd {self.ct_path} && ./setup.sh {self.ct.name}")
 
@@ -144,7 +144,7 @@ class SshCmd(BaseCmd):
 class ToimgCmd(BaseCmd):
 
     def exec(self):
-        self.se.sh(f"lxc publish {self.ct.name} --alias {self.ct.name}")
+        self.se.sh(f"sudo lxc publish {self.ct.name} --alias {self.ct.name}")
 
 
 class GenSshKey(BaseCmd):
@@ -161,13 +161,13 @@ class GenSshKey(BaseCmd):
             cd {ct_path}
             rm -f .conf/private_key
             ssh-keygen -f .conf/private_key -t rsa -b 4096 -C "{user_name} key pair" -q -N ""
-            lxc exec {ct_name} -- bash -lc '\
+            sudo lxc exec {ct_name} -- bash -lc '\
                     mkdir -p /home/{user_name}/.ssh/
                     '
 
-            lxc file push .conf/private_key.pub {ct_name}/home/{user_name}/.ssh/authorized_keys
+            sudo lxc file push .conf/private_key.pub {ct_name}/home/{user_name}/.ssh/authorized_keys
 
-            lxc exec {ct_name} -- bash -lc '\
+            sudo lxc exec {ct_name} -- bash -lc '\
                     chmod 600 /home/{user_name}/.ssh/authorized_keys; \
                     chown {user_name}:{user_name} /home/{user_name}/.ssh/authorized_keys \
                     '
@@ -204,27 +204,27 @@ class TakeSnapshotCmd(BaseCmd):
     def exec(self):
         now = datetime.datetime.today()
         snap_name = "snap_" + now.strftime('%Y-%m-%d_%H:%M:%S.%f')
-        self.se.sh(f"lxc snapshot {self.ct.name} {snap_name}")
+        self.se.sh(f"sudo lxc snapshot {self.ct.name} {snap_name}")
 
 
 class RestoreSnapshotCmd(BaseCmd):
 
     def exec(self):
         restore_snap_name = self.cmd_args.snap_name
-        self.se.sh(f"lxc restore {self.ct.name} {restore_snap_name}")
+        self.se.sh(f"sudo lxc restore {self.ct.name} {restore_snap_name}")
 
 
 class DeleteSnapshotCmd(BaseCmd):
 
     def exec(self):
         del_snap_name = self.cmd_args.snap_name
-        self.se.sh(f"lxc delete {self.ct.name}/{del_snap_name}")
+        self.se.sh(f"sudo lxc delete {self.ct.name}/{del_snap_name}")
 
 
 class BashCmd(BaseCmd):
 
     def exec(self):
-        os.system(f"lxc exec {self.ct.name} -- /bin/bash")
+        os.system(f"sudo lxc exec {self.ct.name} -- /bin/bash")
 
 
 class ExpandDisk(BaseCmd):

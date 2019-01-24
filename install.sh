@@ -1,4 +1,4 @@
-#!/bin/bash -eu
+#!/bin/bash
 set -euo pipefail
 
 CURDIR=$(cd $(dirname $0); pwd)
@@ -15,7 +15,7 @@ sudo cp -r ${CURDIR}/container ${LXD_HOME}/
 sudo cp -r ${CURDIR}/.lxd_profile ${LXD_HOME}/
 
 sudo chown lxd:lxd ${LXD_HOME} -R
-sudo chmod g+rwx ${LXD_HOME} -R
+sudo chmod 774 ${LXD_HOME} -R
 
 sudo cp -r ${CURDIR}/conf ${LXD_SNAP_COMMON}/
 
@@ -32,8 +32,8 @@ sudo lxc network set lxdbr0 raw.dnsmasq "addn-hosts=${LXD_SNAP_COMMON}/conf/lxd_
 # Setting proxy.
 set +u
 if [ ! -z "${http_proxy}" ];then
-  sudo lxc config set core.proxy_http http://tkyproxy.intra.tis.co.jp:8080
-  sudo lxc config set core.proxy_https http://tkyproxy.intra.tis.co.jp:8080
+  sudo lxc config set core.proxy_http ${http_proxy}
+  sudo lxc config set core.proxy_https ${https_proxy}
   sudo lxc config set core.proxy_ignore_hosts localhost
 fi
 set -u
@@ -65,12 +65,6 @@ sudo sysctl -p /etc/sysctl.conf
 set -e
 
 
-cat <<EOT | sudo tee -a /etc/profile.d/lxd.sh > /dev/null
-export LXD_HOME=${LXD_HOME}
-export PATH=${PATH}:${LXD_HOME}/bin
-EOT
-
-
 echo "Please restart system!!"
 
 popd
@@ -79,20 +73,38 @@ pushd ${LXD_HOME}
 git clone https://github.com/yyuu/pyenv.git ${LXD_HOME}/.pyenv
 git clone https://github.com/pyenv/pyenv-virtualenv.git ${LXD_HOME}/.pyenv/plugins/pyenv-virtualenv
 
-set +e
 . .lxd_profile
-set -e
 
-sudo apt install zlib1g-dev libbz2-dev libreadline-dev libsqlite3-dev libssl-dev
+sudo apt install zlib1g-dev libbz2-dev libreadline-dev libsqlite3-dev libssl-dev sudo libmodglue1v5
+
+
+sudo chown lxd:lxd ${LXD_HOME} -R
+sudo chmod 774 ${LXD_HOME} -R
+
+echo "lxd ALL=(ALL) NOPASSWD: ALL" | sudo tee /etc/sudoers.d/poron
+
+
+echo "export PATH=${LXD_HOME}/bin:${PATH}" | sudo tee /etc/profile.d/poron.sh
+echo "export LXD_HOME=${LXD_HOME}" | sudo tee -a /etc/profile.d/poron.sh
+
+
+sudo su - lxd --shell=/bin/bash -c bash -l << EOT
+. /etc/profile.d/poron.sh
+
+pushd ${LXD_HOME}
+. .lxd_profile
+
 pyenv install 3.6.4
 pyenv virtualenv 3.6.4 lxd_python
 pyenv global lxd_python
 
+env
 pip install ruamel.yaml
-popd
+
+pushd
+
+EOT
 
 
-set +e
-. .lxd_profile
-set -e
+
 exec ${SHELL} -l

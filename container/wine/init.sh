@@ -2,16 +2,16 @@
 
 
 ### Create container.
-ctl init --img ubuntu16
+poron init --img ubuntu16
 
 
 ### Generate ssh key.
-ctl start
+poron start
 sleep 5
-ctl gen_sshkey --ssh_user maintain
-ctl stop
+poron gen_sshkey --ssh_user maintain
+poron stop
 
 
 ### Generate ssh key.
-ctl launch
+poron launch
 
